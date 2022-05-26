@@ -1,0 +1,6 @@
+
+{% for i in (1..2) %}
+{% capture value %}f_{{i}}{% endcapture %}
+{% assign currentMetafield = product.metafields.my_fields[value]%}
+{{ currentMetafield }}
+{% endfor %}
