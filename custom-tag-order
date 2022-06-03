@@ -1,0 +1,15 @@
+{%- assign tag_groups = "A,B,C,D" | split: "," -%}
+{%- assign sorted_tags = "" -%}
+	{%- for group in tag_groups -%}
+  		{% for tag in product.tags %}
+    		{%- assign tag_group = tag | split: "_" | first -%}
+    		{%- if tag_group == group -%}
+      			{%- assign sorted_tags = sorted_tags | append: tag | append: "," -%}
+    		{%- endif -%}
+  		{% endfor %}
+	{%- endfor -%}
+
+{%- assign sorted_tags_arr = sorted_tags | remove_last: "," | split: "," -%}
+{%- for tag in sorted_tags_arr -%}
+  {{- tag -}}<br>
+{%- endfor -%}
