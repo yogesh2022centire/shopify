@@ -1,0 +1,22 @@
+{% for i in (1..10) %}
+{% capture value %}accordion_content{{i}}{% endcapture %}
+{% assign currentMetafield = product.metafields.my_fields[value]%}
+
+{% capture value1 %}accordion_heading{{i}}{% endcapture %}
+{% assign currentMetafield1 = product.metafields.my_fields[value1]%}
+
+{% capture value2 %}plus{{i}}{% endcapture %}
+{% assign currentMetafield2 = product.metafields.my_fields[value2] %}
+
+{% if product.metafields.my_fields[value] !=blank %}
+<div class="accordion_container">
+  <div class="accordion_head">{{ currentMetafield1 }}
+    <span class="plusminus">+</span>
+  </div>
+  <div class="accordion_body" style="display: none;">
+    <p> {{ currentMetafield }} </p>
+  </div>
+</div>
+
+{%endif%}
+{% endfor %}
