@@ -1,0 +1,14 @@
+{%- assign current_variant = product.selected_or_first_available_variant -%}
+						{%- if current_variant.unit_price_measurement -%}
+						<div class="unit_price">
+											<span class="money">
+							{{ current_variant.unit_price | money }}</span>
+									<span class="reference_unit">
+											{{ 'general.accessibility.unit_price_separator' | t }}
+											{%- if current_variant.unit_price_measurement.reference_value != 1 -%}
+											{{- current_variant.unit_price_measurement.reference_value -}}&#32;
+											{%- endif -%}
+											{{ current_variant.unit_price_measurement.reference_unit }}
+										</span>
+						</div>
+						{%- endif -%}
