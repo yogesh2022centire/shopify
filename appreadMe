@@ -1,0 +1,43 @@
+step 1: 
+
+install ngrok
+
+step 2:
+
+nun ngrok terminal add add comand for localhost port 80
+
+-ngrok http 80
+
+step 3:
+create a folder inside xampp folder and move install.php, token.php, and inc/functions.php in that folder
+
+
+step 4:
+login in your shopify partner account and create a private app
+https://partners.shopify.com/
+
+
+step 5: 
+
+step up your app token and app secret in install.php and token.php
+
+
+step 6:
+
+get Forwarding url from ngrok note(this is generated when you run ngrok http 80)
+
+
+step 7:
+
+now put forwarding url with shop url without https or http and backslash
+
+like my localhost forwarding url is :  https://e30c-223-190-85-128.in.ngrok.io
+
+and my shop url is : https://centire5.myshopify.com/
+
+and i have to run https://e30c-223-190-85-128.in.ngrok.io/app_name/?shop=centire5.myshopify.com
+
+
+for more you can see in app and app2 folter and in attachment
+
+Thanks
