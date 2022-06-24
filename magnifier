@@ -1,0 +1,8 @@
+<link rel="stylesheet" href="{{'jquery-picZoomer.css'|asset_url}}" />    
+<script src="//code.jquery.com/jquery-1.11.3.min.js"></script>
+<script src="{{'jquery.picZoomer.js'|asset_url}}" defer="defer"></script> 
+<script type="text/javascript">
+  $(function() {
+    $('.test').picZoomer();
+  });
+</script> 
