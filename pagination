@@ -1,0 +1,7 @@
+{% assign products = all_products  %}
+  {% paginate collection.products by 5 %}
+  {% for product in collection.products %}
+    {{ product.title }} <br>
+  {% endfor %}
+   {{ paginate | default_pagination: next: 'Older', previous: 'Newer' }}
+  {% endpaginate %}
