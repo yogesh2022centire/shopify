@@ -1,0 +1,44 @@
+Step 1:
+
+<input type="hidden" value="{{ paginate.next.url }}" data-next-url>
+<input type="hidden" value="{{ paginate.pages }}" data-total-pages>
+<input type="hidden" value="{{ paginate.current_page  }}" data-current-page>
+<div class="load-more_wrap">
+<button class="btn js-load-more" id="load-more-btn">
+  <span load-more-text class="btn" >Load more</span>
+  <span class="hide" loader></span>
+</button>
+</div> 
+
+
+Step 2:
+
+<script src="https://code.jquery.com/jquery-3.6.0.min.js" integrity="sha256-/xUj+3OJU5yExlq6GSYGSHk7tPXikynS7ogEvDej/m4=" crossorigin="anonymous"></script>
+<script>
+$('.js-load-more').on('click', function(){
+  console.log('clicked');
+  var $this =$(this),totalPages = parseInt($('[data-total-pages]').val()),currentPage = parseInt($('[data-current-page]').val());
+  $this.attr('disabled', true);
+  $this.find('[loader]').removeClass('hide');
+  currentPage = currentPage+1;
+  var nextUrl = $('[data-next-url]').val().replace(/page=[0-9]+/,'page='+currentPage);
+  $('[data-current-page]').val(currentPage);
+  $.ajax({
+    url: nextUrl,
+    type: 'GET',
+    dataType: 'html',
+    success: function(responseHTML){
+      $('.card').append($(responseHTML).find('.article-card').html());
+    },
+    complete: function() {
+      
+      if(currentPage < totalPages) {
+         $this.attr('disabled', false); $this.find('[load-more-text]').removeClass('hide'); $this.find('[loader]').addClass('hide');
+      }else{
+      	$('#load-more-btn span').html('No more post to load');
+      }
+    }
+  })
+});  
+
+</script> 
