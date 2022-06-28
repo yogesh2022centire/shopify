@@ -42,3 +42,27 @@ $('.js-load-more').on('click', function(){
 });  
 
 </script> 
+
+
+Step 3: 
+
+.load-more_wrap {
+      margin: 0 auto;
+      text-align: center;
+  }
+   button#load-more-btn {
+      background: blue;
+      color: #FFF;
+      border: none;
+      padding: 14px 42px;
+      border-radius: 24px;
+	  cursor: grab;
+	 border:1px solid blue;
+  }
+  button#load-more-btn:hover{
+	 background: #FFF;
+     color: blue;
+ }
+ button#load-more-btn:disabled {
+    cursor: not-allowed;
+}
