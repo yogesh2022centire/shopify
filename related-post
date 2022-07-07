@@ -1,0 +1,72 @@
+<div class="main_related">
+  
+  {%- assign articleTagsFilteredString = "" -%}
+  
+  {%- for tag in article.tags -%}
+  
+  {%- assign downcaseTag = tag | downcase -%}
+
+  
+  {%- unless downcaseTag contains 'ffff' -%}
+  
+  {%- if articleTagsFilteredString == "" -%}
+  
+  {%- assign articleTagsFilteredString = articleTagsFilteredString | prepend: "," | append: tag -%}
+  
+  {%- else -%}
+  
+  {%- assign articleTagsFilteredString = articleTagsFilteredString | append: "," | append: tag -%}
+  
+  {%- endif -%}
+  {%- endunless -%}
+  {%- endfor -%}
+  
+  {%- assign articleTagsFiltered = articleTagsFilteredString | remove_first: "," | split: ","-%}
+    {% assign currentHandle = article.handle %}
+    {% assign articlesFound = 1 %}
+    {% for related_article in blogs[blog.handle].articles %}
+      {% unless related_article.handle == currentHandle %}
+  
+      {%- assign showArticle = false -%}
+  
+      {%- for tag in related_article.tags -%}
+  
+       {%- if articleTagsFiltered contains tag -%}
+         {%- assign showArticle = true -%}
+         {%- break -%} 
+       {%- endif -%}
+  
+      {%- endfor -%}
+  
+        
+       <div class="relatedAt">
+         <a href="{{ related_article.url }}">
+             <div class="main_related_article">
+               {%- if related_article.image -%}
+           {{ related_article | img_url: '100x160', scale: 2 | img_tag: '' }} 
+          {%- endif -%}
+             <strong>{{ articlesFound }}</strong>
+           </div>
+               <div class="main_article_content_wrapper">
+                 <div class="main_article_title">
+                   <h2>{{ related_article.title }}</h2>
+                 </div>
+               
+                 
+                 <div class="read_article">
+                   <a href="{{ related_article.url }}" aria-label="Read more: {{ related_article.title }}">
+                     Read article
+                   </a>
+                 </div>
+               </div>
+            </a>
+       
+           </div>
+        
+       {% assign articlesFound = articlesFound |plus: 1 %}
+       {% if articlesFound == 4 %}{% break %}{% endif %}
+  
+      
+      {% endunless %}
+    {% endfor %}
+</div>
