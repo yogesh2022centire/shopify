@@ -1,0 +1,33 @@
+{% if media.media_type =='video' %}
+<video autoplay poster="{{ media.preview_image | image_url }}" src="{{ media.sources[1].url }}" class="myvideo" controls="" loop="" 
+ width="auto" height="300" alt="" ></video>
+{% else %}
+
+{% endif %}
+
+
+
+
+
+
+
+
+{% assign bundle_products = product.metafields.custom.bundle_product.value %}
+{% if bundle_products != blank %}
+  <div class="bundle-product">
+  <ul>
+  {% for bundle in bundle_products %}
+    <li> {{ bundle.title }} {{ bundle.price |money }}</li>
+  {% endfor %}
+  <button type="submit" id="add-{{ collections['Frontpage'].id }}" onclick="addAllItems('{% for product in bundle_products %}{{ product.selected_or_first_available_variant.id }}{% unless forloop.last %},{% endunless %}{% endfor %}'); return false;">Add to cart</button>
+  </ul>
+  </div>
+{% endif %}
+
+{% assign array_of_badges = product.metafields.custom.list.value %}
+{% if array_of_badges %}
+ {% for product_badge in array_of_badges %}
+   {{ product_badge }}
+  <img src="{{ product_badge | image_url }}" alt="">
+ {% endfor %}
+{% endif %}
