@@ -1,0 +1,33 @@
+
+table#products {
+    width: 100%;
+}
+th, td {
+    text-align: left;
+    padding: 20px 10px;
+}
+table#products thead {
+    width: 98%;
+    padding: 10px 10px 20px 10px;
+    border: 1px solid #BFBFBF;
+    background-color: white;
+    box-shadow: 5px #aaaaaa;
+    position: relative;
+}
+.wrapper h1 {
+    margin-bottom: 40px;
+    font-size: 24px;
+    text-align: center;
+}
+.wrapper h1:before {
+    position: absolute;
+    content: "";
+    left: 46%;
+    top: 55px;
+    color: red;
+    border-bottom: 2px solid red;
+    width: 100px;
+}
+img.pr-image {
+    height: 50px;
+}
