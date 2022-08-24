@@ -1,7 +1,7 @@
 
 
 {% for article in blogs['blog'].articles %}
-<h2><a href="{{ article.url }}">{{ article.title }}</a></h2>
+<h2><a href="{{ article.url }}">{{ article.title }}</a></h2> 
 {% endfor %}
 =========================================
 {%- paginate blogs['news'].articles by 2 -%}
@@ -19,7 +19,7 @@
         {%- endif -%}
       </p>
       {%- endif -%}
-       <img src="{{ article.image.src | image_url: width: 533 }}" >        
+       <img src="{{ article.image.src | image_url: width: 533 }}" >         
   {% endfor %}
 
 {%- if paginate.pages > 2 -%}
