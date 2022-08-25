@@ -1,0 +1,51 @@
+
+
+$(document).ready(function () {
+    var found = setInterval(function(){
+        if( $(".product-grid.custom ").length ){
+            clearInterval(found);
+        }
+        // slick slider code
+        $(".product-grid.custom ").slick({
+            dots: !1,
+            infinite: true,
+            autoplay:false,
+            autoplaySpeed:false,
+            speed: 300,
+            slidesToShow:4 ,
+            slidesToScroll: 1,
+             responsive: [
+                {
+          breakpoint:5000,
+          settings: "unslick"
+       },
+        {
+          breakpoint: 1024,
+          settings: {
+            slidesToShow: 3,
+            slidesToScroll: 1,
+            infinite: true,
+            dots: false
+          }
+        },
+        {
+          breakpoint: 600,
+          settings: {
+            slidesToShow: 2,
+            slidesToScroll: 2
+          }
+        },
+        {
+          breakpoint: 480,
+          settings: {
+            slidesToShow: 1,
+            slidesToScroll: 1,
+            arrows:false
+          }
+        }
+       
+      ]
+        })
+        
+    }, 200);
+});
