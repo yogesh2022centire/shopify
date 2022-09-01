@@ -1,0 +1,131 @@
+<script src="https://code.jquery.com/jquery-1.12.4.js"></script>
+{{ 'ajaxinate.min.js' | asset_url | script_tag }}
+{{ 'template-collection.css' | asset_url | stylesheet_tag }}
+{{ 'component-loading-overlay.css' | asset_url | stylesheet_tag }}
+{{ 'component-card.css' | asset_url | stylesheet_tag }}
+{{ 'component-price.css' | asset_url | stylesheet_tag }}
+    <script>
+      console.log('okay');
+    function AddReadMore() {
+        //This limit you can set after how much characters you want to show Read More.
+        var carLmt = 1000;
+        // Text to show when text is collapsed
+        var readMoreTxt = " ... Read More";
+        // Text to show when text is expanded
+        var readLessTxt = " Read Less";
+
+
+        //Traverse all selectors with this class and manupulate HTML part to show Read More
+        $(".addReadMore").each(function() {
+            if ($(this).find(".firstSec").length)
+                return;
+
+            var allstr = $(this).text();
+            if (allstr.length > carLmt) {
+                var firstSet = allstr.substring(0, carLmt);
+                var secdHalf = allstr.substring(carLmt, allstr.length);
+                var strtoadd = firstSet + "<span class='SecSec'>" + secdHalf + "</span><span class='readMore'  title='Click to Show More'>" + readMoreTxt + "</span><span class='readLess' title='Click to Show Less'>" + readLessTxt + "</span>";
+                $(this).html(strtoadd);
+            }
+
+        });
+        //Read More and Read Less Click Event binding
+        $(document).on("click", ".readMore,.readLess", function() {
+            $(this).closest(".addReadMore").toggleClass("showlesscontent showmorecontent");
+        });
+    }
+    $(function() {
+        //Calling function after Page Load
+        AddReadMore();
+    });
+    </script>
+
+{% style %}
+.card-wrapper {
+    width: 24%;
+}
+.addReadMore.showlesscontent .SecSec,
+    .addReadMore.showlesscontent .readLess {
+        display: none;
+    }
+
+    .addReadMore.showmorecontent .readMore {
+        display: none;
+    }
+
+    .addReadMore .readMore,
+    .addReadMore .readLess {
+        font-weight: bold;
+        margin-left: 2px;
+        color: blue;
+        cursor: pointer;
+    }
+
+    .addReadMoreWrapTxt.showmorecontent .SecSec,
+    .addReadMoreWrapTxt.showmorecontent .readLess {
+        display: block;
+    }
+{% endstyle %}
+ <div class="page-width" style="padding-top:75px;">
+ <div class="product-grid-container" id="ProductGridContainer">
+{% assign collection = collections['frontpage'] %}
+{% paginate collection.products by 4 %}
+    <div class="collection">
+      <h1>{{ collection.title }}</h1>
+      <div class="addReadMore showlesscontent">{{ collection.description }}</div>
+      <ul id="product-grid" data-id="{{ section.id }}" class="
+              grid product-grid grid--{{ section.settings.columns_mobile }}-col-tablet-down
+              grid--{{ section.settings.columns_desktop }}-col-desktop" >
+      {% for product in collections['frontpage'].products %}
+          {% render 'card-product',
+            card_product: product,
+            media_aspect_ratio: section.settings.image_ratio,
+            show_secondary_image: section.settings.show_secondary_image,
+            show_vendor: section.settings.show_vendor,
+            show_rating: section.settings.show_rating,
+            lazy_load: lazy_load,
+            show_quick_add: section.settings.enable_quick_add,
+            section_id: section.id
+
+          %}
+      {% endfor %}
+      </ul>
+    </div>
+
+    <div id="AjaxinatePagination">
+      {% if paginate.next %}
+        <a href="{{ paginate.next.url }}">Loading More</a>
+      {% endif %}
+    </div>
+{% endpaginate %}
+</div>
+<script>
+document.addEventListener("DOMContentLoaded", function() {
+  var endlessScroll = new Ajaxinate({
+    container: '#product-grid',
+    pagination: '#AjaxinatePagination',
+    method: 'click',
+    offset: 1000
+  });
+});
+</script>
+
+{% schema %}
+{
+  "name": "Loadmore",
+  "tag": "section",
+  "presets": [
+    {
+      "name": "Loadmore"
+    }
+  ],
+  "locales": {
+    "en": {
+      "title": "Loadmore"
+    },
+    "fr": {
+      "title": "Diaporama"
+    }
+  }
+}
+{% endschema %}
