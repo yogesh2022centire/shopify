@@ -1,0 +1,129 @@
+{%- if show_badge -%}   
+
+{%- assign new_products_badge = false -%}
+    
+    {%- if product.tags contains 'new-product' -%}
+    
+    {%- assign new_products_badge = true -%}
+    
+    {%- endif -%}
+
+      {%- assign new_in = false -%}
+      {%- assign best_value = false -%}
+      {%- assign sold_out = false -%}
+      {%- assign on_sale = false -%}
+      {%- assign has_badge = false -%}
+      {%- assign best_seller = false -%}
+      {%- assign badge_image = false -%}
+      {%- capture product_labels -%}
+
+        
+        {%- for tag in product.tags -%}
+        {%- if new_products_badge  -%}
+
+        <p class="ProductItem__Label Heading Text--subdued product-new-badge test"><span class="badge-text product-new-badge-text">{{ 'products.product.labels.new' | t }}</span></p>
+
+        {%- assign has_badge = true -%}
+        {%- break -%}
+        {%- endif -%}
+    {%- for index in (1..5) -%}
+          {%- if tag contains '_label' -%}
+
+          {%- assign tagHandle = tag | append: " " | split: '_label:' | last | escape | handleize -%}
+          {%- assign tagImageName = tagHandle | append: ".png" -%}
+            <li data-image-name="{{ tagImageName }}" class="product_badges">
+            {%- if images[tagImageName] != blank -%}
+              <img src="{{tagImageName | file_img_url: 'master'}}" />
+            {%- endif -%}
+            <span class="badge-text-circle ProductItem__Label Heading Text--subdued">{{ tag | split: '_label:' | last }}</span>
+            </li>
+          
+
+          {%- assign has_badge = true -%}
+          {%- break -%}
+          {%- endif -%}
+      {%- endfor -%}
+
+
+
+
+          
+          {%- if tag contains 'new' -%}
+            {% assign badge_image_src = settings.new_badge  %}
+             {% if badge_image_src %}
+                <div class="badge-text-circle ProductItem__Label Heading Text--subdued"><img src="{{ badge_image_src | img_url: 'master' }}"></div>
+               {%- assign badge_image = true -%}
+               {% else %}
+                 <span class="badge-text-circle ProductItem__Label Heading Text--subdued">{{ 'products.product.labels.new' | t }}</span>
+               {% endif %}
+            
+          
+            {%- assign new_in = true -%}
+			{%- assign has_badge = true -%}
+            {%- break -%}
+          {%- endif -%}
+          
+          {%- if tag contains 'best-value' -%}
+            {% assign badge_image_src = settings.best_value_badge  %}
+             {% if badge_image_src %}
+                <div class="badge-text-circle ProductItem__Label Heading Text--subdued"><img src="{{ badge_image_src | img_url: 'master' }}"></div>
+               {%- assign badge_image = true -%}
+               {% else %}
+                 <span class="badge-text-circle ProductItem__Label Heading Text--subdued">>{{ 'products.product.labels.best_value' | t }}</span>
+               {% endif %}
+             
+
+             
+            {%- assign best_value = true -%}
+			{%- assign has_badge = true -%}
+            {%- break -%}
+          {%- endif -%}
+          {%- if tag contains 'best-seller' -%}
+            {% assign badge_image_src = settings.best_seller_badge  %}
+             {% if badge_image_src %}
+                <div class="badge-text-circle ProductItem__Label Heading Text--subdued"><img src="{{ badge_image_src | img_url: 'master' }}"></div>
+               {%- assign badge_image = true -%}
+               {% else %}
+                 <span class="badge-text-circle ProductItem__Label Heading Text--subdued">{{ 'products.product.labels.best_seller' | t }}</span>
+               {% endif %}
+          
+          {%- assign best_seller = true -%}
+		  {%- assign has_badge = true -%}
+          {%- break -%}
+          {%- endif -%}
+    		{%- if tag contains 'sold-out' -%}
+               {% assign badge_image_src = settings.sold_out_badge  %}
+             {% if badge_image_src %}
+                <div class="badge-text-circle ProductItem__Label Heading Text--subdued"><img src="{{ badge_image_src | img_url: 'master' }}"></div>
+               {%- assign badge_image = true -%}
+               {% else %}
+                 <span class="badge-text-circle ProductItem__Label Heading Text--subdued">{{ 'products.product.labels.sold_out' | t }}</span>
+               {% endif %}
+            
+            {%- assign sold_out = true -%}
+			{%- assign has_badge = true -%}
+            {%- break -%}
+          {%- endif -%}
+   
+        {%- endfor -%}
+
+         {%- unless has_badge -%}
+        {%- if product.available -%}
+          {%- if product.compare_at_price > product.price -%}
+          
+            <span class="badge-text-circle ProductItem__Label ProductItem__Label--onSale Heading Text--subdued">{{ 'products.product.labels.sale' | t }}</span>
+          {%- assign on_sale = true -%}
+          {%- endif -%}
+        {%- else -%}
+        {%- endif -%}
+        {% endunless %}
+
+
+      {%- endcapture -%}
+
+      {%- if product_labels != blank -%}
+        <div class="{% unless badge_image %}ProductItem__LabelList{% else %}ProductItem__Labelbadge{% endunless %} {% if best_seller %} bestSeller__Label {% endif %} {% if new_products_badge %} product-new-badge-wrapper{% endif %}  {% if new_in %} newIn__Label {% endif %} {% if best_value %} bestValue__Label {% endif %} {% if on_sale %} sale__Label{% endif %} {% if sold_out %} soldOut__Label {% endif %}">
+          {{ product_labels }}
+        </div>
+      {%- endif -%}
+    {%- endif -%}
