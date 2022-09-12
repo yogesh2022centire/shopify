@@ -1,0 +1,59 @@
+{% if collection and collection.handle == "sale"%}
+<script type="text/javascript">
+{% assign saleVariantsOption1List = "" %}
+{% assign saleVariantsOption2List = "" %}
+{% assign saleVariantsOption3List = "" %}
+
+{% for variant in product.variants %}
+
+{% if variant.compare_at_price and variant.price > variant.compare_at_price %}
+
+{% assign saleVariantsOption1List = saleVariantsOption1List | append: "|" | append: variant.option1 %}
+{% assign saleVariantsOption2List = saleVariantsOption2List | append: "|" | append: variant.option2 %}
+{% assign saleVariantsOption3List = saleVariantsOption3List | append: "|" | append: variant.option3 %}
+ 
+{% endif %}
+{% endfor %}
+{% assign saleVariantsOption1 = saleVariantsOption1List | remove_first: "|" | split: "|" | uniq %}
+{% assign saleVariantsOption2 = saleVariantsOption2List | remove_first: "|" | split: "|" | uniq %}
+{% assign saleVariantsOption3 = saleVariantsOption3List | remove_first: "|" | split: "|" | uniq %}
+
+let saleVariantsOption1 = {{saleVariantsOption1 | json}};
+let saleVariantsOption2 = {{saleVariantsOption2 | json}};
+let saleVariantsOption3 = {{saleVariantsOption3 | json}};
+
+setTimeout(function() {
+if($('#SingleOptionSelector-0 option').length) {
+
+  Array.from($('#SingleOptionSelector-0 option')).forEach(option => {
+   let $option = $(option);
+   let optionValue = $option.attr('value');
+    if(!saleVariantsOption1.includes(optionValue)) {
+      $option.addClass('hide');
+      //$option.remove();
+    }
+});
+}
+if($('#SingleOptionSelector-1 option').length) {
+
+  Array.from($('#SingleOptionSelector-1 option')).forEach(option => {
+   let $option = $(option);
+   let optionValue = $option.attr('value');
+    if(!saleVariantsOption2.includes(optionValue)) {
+      $option.addClass('hide');
+    }
+});
+}
+if($('#SingleOptionSelector-2 option').length) {
+
+  Array.from($('#SingleOptionSelector-2 option')).forEach(option => {
+   let $option = $(option);
+   let optionValue = $option.attr('value');
+    if(!saleVariantsOption3.includes(optionValue)) {
+      $option.addClass('hide');
+    }
+});
+}
+}, 500); 
+</script>
+{%  endif %}
