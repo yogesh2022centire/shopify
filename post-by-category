@@ -1,0 +1,34 @@
+<div class="blog-post-main container product-template__container">
+
+{% for block in section.blocks %}
+  {%- assign blog = blogs[block.settings.blog] -%}
+  {% assign blog_handles = blog.handle %}
+    <div class="main-handles">
+     {% for handle in blog_handles %}
+
+       
+        <div class="title-and-img">
+       <a href="{{ shop.url }}/blogs/{{ blog_handles }}">
+            {% if block.settings.blog-title !=blank %}
+               <h1>{{ block.settings.blog-title }}</h1> 
+            {% else %}
+              <h1>{{ blog.title }}</h1> 
+            {% endif %}
+            {% if block.settings.featured-image !=blank %}
+             {{ block.settings.featured-image | img_url: 'master' | img_tag }}
+            {% endif %}
+       </a>
+        </div>
+        {% for article in blogs[handle].articles limit: block.settings.posts_per_view %}
+          <div class="blog-main">
+            <div class="article {{ forloop.index }}">
+               <h4><a href="{{ article.url }}">{{ article.title }}</a></h4>
+            </div>
+          </div>
+         {% endfor %}
+      {% endfor %}
+    </div>
+    
+    
+{% endfor %}
+</div>
