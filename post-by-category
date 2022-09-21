@@ -1,34 +1,45 @@
-<div class="blog-post-main container product-template__container">
+
+<div class="blog-post-main container ">
 
 {% for block in section.blocks %}
   {%- assign blog = blogs[block.settings.blog] -%}
-  {% assign blog_handles = blog.handle %}
     <div class="main-handles">
-     {% for handle in blog_handles %}
-
-       
         <div class="title-and-img">
-       <a href="{{ shop.url }}/blogs/{{ blog_handles }}">
+       <a href="{{ shop.url }}/blogs/{{ blog.handle }}">
             {% if block.settings.blog-title !=blank %}
-               <h1>{{ block.settings.blog-title }}</h1> 
+               <h2>{{ block.settings.blog-title }}</h2> 
             {% else %}
-              <h1>{{ blog.title }}</h1> 
+              <h2>{{ blog.title }}</h2> 
             {% endif %}
             {% if block.settings.featured-image !=blank %}
              {{ block.settings.featured-image | img_url: 'master' | img_tag }}
             {% endif %}
        </a>
         </div>
-        {% for article in blogs[handle].articles limit: block.settings.posts_per_view %}
+
+       
+        {% for article in blog.articles limit: block.settings.posts_per_view %}
           <div class="blog-main">
-            <div class="article {{ forloop.index }}">
-               <h4><a href="{{ article.url }}">{{ article.title }}</a></h4>
+            <div class="article">
+               <span class="h4"><a href="{{ article.url }}">{{ article.title }}
+                 <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-arrow-right-short" viewBox="0 0 16 16">
+  <path fill-rule="evenodd" d="M4 8a.5.5 0 0 1 .5-.5h5.793L8.146 5.354a.5.5 0 1 1 .708-.708l3 3a.5.5 0 0 1 0 .708l-3 3a.5.5 0 0 1-.708-.708L10.293 8.5H4.5A.5.5 0 0 1 4 8z"/>
+</svg></a></span>
+
+          
             </div>
           </div>
+  
          {% endfor %}
-      {% endfor %}
+       <div class="shopall">
+       <a href="{{ shop.url }}/blogs/{{ blog.handle }}">Zu allen Beiträgen <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-arrow-right-short" viewBox="0 0 16 16">
+  <path fill-rule="evenodd" d="M4 8a.5.5 0 0 1 .5-.5h5.793L8.146 5.354a.5.5 0 1 1 .708-.708l3 3a.5.5 0 0 1 0 .708l-3 3a.5.5 0 0 1-.708-.708L10.293 8.5H4.5A.5.5 0 0 1 4 8z"/>
+</svg></a>
+       </div>
+
     </div>
-    
+
+  
     
 {% endfor %}
 </div>
