@@ -1,0 +1,173 @@
+<script type="text/javascript">
+	$( document ).on( 'click', 'a.site-header__cart', function(e){
+		e.preventDefault();
+		$( '.cart-sb-container' ).addClass('side-cart-active');
+		$('.cart-overlay').fadeIn(400);
+		$('html').addClass('overflowHidden');
+		return false;
+	} );
+	
+	$( document ).on( 'click', 'a.cart-overlay, a.close-cart', function(e){
+		e.preventDefault()
+		$( '.cart-sb-container' ).removeClass('side-cart-active');
+		$('.cart-overlay').fadeOut(400);
+		$('html').removeClass('overflowHidden');
+		return false;
+	} );
+	
+Shopify.updateCartInfo = function(cart, cart_summary_id, cart_count_id) {
+	//Bold: Ensure the cart's line items have been updated with their option information
+	if(typeof(BOLD) === 'object' && BOLD.helpers && typeof(BOLD.helpers.cleanCart) === 'function' )
+		cart = BOLD.helpers.cleanCart(cart);
+
+		if ((typeof cart_summary_id) === 'string') {
+			var cart_summary = jQuery(cart_summary_id);
+			if (cart_summary.length) {
+				cart_summary.empty();      
+				jQuery.each(cart, function(key, value) {
+					if (key === 'items') {
+						if (value.length) {
+				jQuery('<div class="items"></div>').appendTo(cart_summary);
+							var table = jQuery(cart_summary_id + ' div.items');
+			 
+							jQuery.each(value, function(i, item) {
+								if(item.formatted_recurring_desc === undefined)
+									item.formatted_recurring_desc = "";
+								var itemLine = i + 1;
+								var productType = item.product_type;
+								productType = productType.split(' ');
+								price = item.price / 100;
+								priceFormatted = price.toString().split('.');
+								if(priceFormatted[1] == undefined) {
+									priceLast = '00';
+								} else {
+									priceLast = priceFormatted[1];
+								}
+								priceHTML = '<span>$</span>' + priceFormatted[0] + '<span>.' + priceLast + '</span>';
+								var itemHTML = '<div class="csb-item-row">'+
+										'<div class="csb-img-container"><span class="cart__image" style="background-image:url(' + Shopify.resizeImage(item.image, '200x') + ')"></span></div>'+
+										'<div class="csb-info-container">' + 
+										'<div class="product-type-row"><p class="product-cart-type">' + productType[0] + '<span>' + productType[1] + '</span></p>' +
+										'<a href="javascript:void(0);" class="cart__remove" data-line="'+ itemLine +'" aria-label="{{ 'cart.general.remove' | t }} '+item.product_title+'"><img src="{{ 'remove.png' | asset_url }}" alt="" /></a>'+
+										'</div>' +
+										'<div class="csb-title-container"><p class="csb-item-title">'+item.product_title +
+										'</p><span class="csb-item-price">' + priceHTML + '</span></div>' +
+										'<div class="cart__qty">'+
+										'<div class="product-form__item product-form__item--quantity">'+
+										'<a href="#" class="quantity-minus" data-id="'+ item.id +'">-</a>'+
+										'<input class="cart__qty-input" type="number" name="updates[]" id="updates_large_'+ item.id +'" value="'+ item.quantity +'" min="0" pattern="[0-9]*" data-quantity-item="'+ itemLine +'"  data-id="'+ item.id +'">'+
+										'<a href="#" class="quantity-add" data-id="'+ item.id +'">+</a>'+
+										'</div>'+
+										'</div>'+
+										'</div>'+
+										'</div>';
+								jQuery(itemHTML).appendTo(table);
+							});
+							var cartprice = cart.total_price / 100;
+							cartpriceFormatted = cartprice.toString().split('.');
+							if(cartpriceFormatted[1] == undefined) {
+								priceLast = '00';
+							} else {
+								priceLast = cartpriceFormatted[1];
+							}
+							cartpriceHTML = '<span>$</span>' + cartpriceFormatted[0] + '<span>.' + priceLast + '</span>';       
+							jQuery('<div class="sticky-cart-footer"><div class="action"><button class="primary-btn btn-orange cart__submit cart__submit-control cart-action-btn" onclick="window.location=\'/checkout\'">{{ 'cart.general.checkout' | t }}</button><a href="/cart\" class="cont-action-btn">View Cart</a></div></div>').appendTo(cart_summary);  
+							jQuery('<p class="subtotal-cartsb"><span class="sub-title">Total</span><span class="sub-price">' + cartpriceHTML + '</span></p>').prependTo('.sticky-cart-footer');              
+						}
+						else {
+							jQuery('<div class="cart-item-empty text-center"><span></span><p>{{ 'cart.general.empty' | t }}</p></div>').appendTo(cart_summary);
+						}
+					}
+				});
+								
+				
+			}
+		}
+		
+		updateCartDesc(cart);
+	};
+	
+	function updateCartDesc(data){
+		var $cartLinkText = $('#CartCount');
+		var $cartPrice = '<span class="total"> - '+ Shopify.formatMoney(data.total_price, "{{shop.money_format}}") +'</span>';
+		switch(data.item_count){
+			case 0:
+				$cartLinkText.html('<span class="number">0</span>');
+				break;
+			case 1:
+				$cartLinkText.html('<span class="number">1</span>');
+				break;
+			default:
+				$cartLinkText.html('<span class="number">'+data.item_count+'</span>');
+				break;
+		}
+		
+		{% if settings.show_multiple_currencies %}
+			currenciesCallbackSpecial('#cart-info span.money');
+		{% endif %}
+	}
+	
+	Shopify.onCartUpdate = function(cart) {
+		Shopify.updateCartInfo(cart, '#cart-info #cart-content', 'shopping-cart');
+	};
+	
+	$(document).ready(function() {
+			
+		Shopify.getCart(function(cart) {
+			
+			Shopify.updateCartInfo(cart, '#cart-info #cart-content');		
+		});
+});
+</script>
+
+<script>
+	function _cartChange(data) {
+		$.ajax({
+			url:'/cart/change.js',
+			dataType: 'json',
+			type: 'post',
+			data:  data,
+			success: function(cart) {           
+				$("#CartCount").html(cart.item_count);
+				Shopify.updateCartInfo(cart, '#cart-info #cart-content');
+			}
+		});
+	}
+	
+	$(document).ready(function(){
+		$(document).on("click",".cart-sb-container .quantity-add",function(){    
+
+			variantId = $(this).data('id');
+			quantity =  parseInt($(this).prev().val());
+
+			let data = {  quantity: quantity, id: variantId};
+			_cartChange(data);
+		});
+
+		$(document).on("click",".cart-sb-container .quantity-minus",function(){        
+			variantId = $(this).data('id');
+			quantity = parseInt($(this).next().val());
+			let data = { quantity: quantity, id: variantId};
+			_cartChange(data);
+		});
+
+
+		$(document).on("click",".cart-sb-container .cart__remove",function(){        
+			lineNumber = $(this).data("line");
+			quantity = 0;
+
+			let data = { quantity: quantity, line: lineNumber};
+			_cartChange(data);
+		});
+
+		$(document).on("change",".cart-sb-container .cart__qty-input",function(){        
+			variantId = $(this).data('id');
+			quantity = $(this).val();
+
+			let data = {  quantity: quantity, id: variantId};
+			_cartChange(data);
+		});
+	});
+
+
+</script>
