@@ -1,0 +1,257 @@
+{% style %}
+
+.hero-banner .container {
+    max-width: 1320px;
+    width: 100%;
+}
+.content-container.hero-banner {
+    position: relative;
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+    padding: 60px 0 70px;
+    z-index:1;
+}
+
+.content-container.hero-banner:before {
+    content: '';
+    position: absolute;
+    background: linear-gradient(to left, rgba(0, 0, 0, 0) 0%, rgba(0, 0, 0, 1) 90%);
+    width: 100%;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 100%;
+    z-index: -1;
+}
+.banner-card-list {
+    display: flex;
+    color: #fff;
+    flex-wrap:wrap;
+}
+.banner-card-list .card-list {
+    width: 25%;
+    text-align: center;
+    padding: 10px 10px 10px 0;
+}
+.content-container.hero-banner .text-col-des {
+    max-width: 270px;
+    color: #ffffff;
+    font-size: 16px;
+    line-height: 23px;
+}
+.banner-card-list .card-list a.card-link {
+    color: #fff;
+    font-size: 23px;
+    line-height: 1.3;
+    text-decoration: none;
+}
+.content-container.hero-banner .hero-item-title.text-uppercase {
+    font-weight: 400;
+    font-size:32px;
+}
+.text-col-box.banner-content-wrapper {
+    padding: 60px 15px;
+}
+.text-col-box.banner-content-wrapper .heading-h1 {
+    color: #fff;
+    font-size: 42px;
+    line-height: 1.3;
+    margin-bottom: 10px;
+}
+.banner-card-list .card-list a.card-link p {
+    font-size: 13px;
+}
+.text-col-box.banner-content-wrapper .btn {
+    margin-top: 30px;
+}
+.section-{{ section.id }} .btn.btn-banner {
+    border-radius: 45px;
+}
+.btn.btn-banner:hover {
+    background: #e79059!important;
+}
+.banner-card-list {
+    display: flex;
+    color: #fff;
+    max-width: 1400px;
+    margin: 0 auto;
+}
+.banner-card-list .card-link:focus {
+    outline: none;
+}
+.banner-grid .col-md-3.col-lg-3.col-sm-6.col-xs-6 {
+    padding: 0;
+}
+.banner-slider .col-md-3.col-lg-3.col-sm-6.col-xs-6 {
+    padding: 0;
+}
+.banner-grid .collection-thumb-title.text-normal {
+    line-height: 20px;
+}
+
+@media(max-width:768px){
+  .content-container.hero-banner {
+      background-position: 60% 100%;
+  }
+  
+  .text-col-box.banner-content-wrapper .heading-h1 {
+    font-size: 36px;
+    line-height: 1;
+    text-align: left;
+    margin-bottom: 10px;
+  }
+  .content-container.hero-banner .text-col-des {
+      max-width: 270px;
+      color: #ffffff;
+      width: 100%;
+      text-align: left;
+  }
+  .content-container.hero-banner .hero-item-title.text-uppercase {
+      font-size: 24px;
+  }
+  .content-container.hero-banner .btn.btn-banner {
+      width: 100%;
+      max-width: 245px;
+  }
+  .banner-card-list .card-list {
+      padding: 0 50px;
+  }
+  .banner-slider .slick-next {
+      right: 30px;
+  }
+  .banner-slider .slick-prev, .banner-slider .slick-next{
+    background: transparent;
+  }
+    .banner-slider .slick-prev {
+      left: 20px;
+      z-index: 9;
+  }
+}
+{% endstyle %}
+<div class="content-container hero-banner hero-{{ section.settings.collection_list_option }} section-{{ section.id }}" style="background-image: url({{ section.settings.image | img_url:'master' }});">
+    <div class="container">
+        <div class="row">
+            <div class="text-col-box banner-content-wrapper">
+                {% if section.settings.heading != blank %}
+                <h1 class="heading-h1">{{ section.settings.heading }}</h1>
+                {% endif %}
+                {% if section.settings.sub_heading != blank %}
+                  <h2 class="text-col-des">{{ section.settings.sub_heading }}</h2>
+                {% endif %}
+                {% if section.settings.btn_text != blank %}
+                <a href="{{ section.settings.btn_url }}" class="btn btn-banner"><span class="know-more">{{ section.settings.btn_text }}</span></a>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+</div>
+{% if section.blocks.size > 0 %}
+<div class="{% if section.settings.collection_list_option =='grid' %}row row-flex{% endif %} banner-{{ section.settings.collection_list_option }}">
+    {% for block in section.blocks %}
+    {%- assign collection = collections[block.settings.collection] -%}
+    <div class="col-md-3 col-lg-3 col-sm-6 col-xs-6" bis_skin_checked="1">
+        <div class="collection-thumb collection-thumb-sqr" bis_skin_checked="1">
+            <div class="collection-thumb-img-wrap" bis_skin_checked="1">
+                <div class="collection-thumb-img-overlay" bis_skin_checked="1"></div>
+                <div
+                    class="visible_lazy collection-thumb-img lazyloaded"
+                    data-bgset=""
+                    data-parent-fit="cover"
+                    style="background-image: url('{{ collection | img_url: 'master' }}');"
+                    id=""
+                    bis_skin_checked="1"
+                >
+                </div>
+                <div class="spinner-cube" bis_skin_checked="1">
+                    <div class="loadFacebookG" bis_skin_checked="1">
+                        <div class="blockG_1 facebook_blockG" bis_skin_checked="1"></div>
+                        <div class="blockG_2 facebook_blockG" bis_skin_checked="1"></div>
+                        <div class="blockG_3 facebook_blockG" bis_skin_checked="1"></div>
+                    </div>
+                </div>
+            </div>
+            <div class="collection-thumb-caption" bis_skin_checked="1">
+                <a href="{{ collection.url }}" bis_skin_checked="1"><div class="collection-thumb-title text-normal">{{ collection.title }}</div></a>
+                {% if collection.description %}<p>{{ collection.description | strip_html | truncate: 80 }}</p>{% endif %}
+                <a href="{{ collection.url }}" bis_skin_checked="1"><span class="know-more">JETZT ENTDECKEN</span> </a>
+            </div>
+        </div>
+    </div>
+    {% endfor %}
+</div>
+{% endif %}
+{% schema %}
+  {
+    "name": "Banner",
+   "settings": [
+       {
+          "type": "select",
+          "id": "collection_list_option",
+          "label": "Collection List Option",
+          "options": [
+            {
+              "value": "slider",
+              "label": "Slider"
+            },
+            {
+              "value": "grid",
+              "label": "Grid"
+            }
+          ],
+          "default": "slider"
+        },
+        {
+          "type": "image_picker",
+          "id": "image",
+          "label": "Background image"
+        },
+        {
+            "type": "text",
+            "id": "heading",
+            "label": "Heading"
+          },
+          {
+            "type": "textarea",
+            "id": "sub_heading",
+            "label": "Sub Heading"
+          },
+         {
+            "type": "text",
+            "id": "btn_text",
+            "label": "Button Text"
+          },
+         {
+            "type": "url",
+            "id": "btn_url",
+            "label": "Button Link"
+          }
+        ],
+        "blocks": [
+           {
+             "name": "Collection List",
+             "type": "card",
+             "settings": [
+               {
+                 "type": "collection",
+                 "id": "collection",
+                 "label": "Select Collection"
+               }
+              
+             ]
+           }
+        ],
+       "presets":[
+            {
+            "name": "Banner",
+            "category": "Banner"
+            }
+        ]
+  }
+{% endschema %}
+
+{% stylesheet %}
+{% endstylesheet %}
+
+{% javascript %}
+{% endjavascript %}
