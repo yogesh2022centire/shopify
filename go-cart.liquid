@@ -1,3 +1,97 @@
+theme.liquid
+
+{%- section 'go-cart' -%}
+
+    <script>
+      var goCart = new GoCart();
+    </script>
+    
+    {%- if settings.show_klaviyo_popup -%}
+    <script async type="text/javascript" src="https://static.klaviyo.com/onsite/js/klaviyo.js?company_id={{ settings.klaviyo_popup_embedcode| escape }}"></script>
+    {% endif %}
+    
+    
+    <script>
+          jQuery(document).on('change','.js-qty .js-qty__num',function(){
+            var qty = jQuery(this).val();
+            var price = jQuery('#ProductPrice').attr('content');
+            var total = parseFloat(parseFloat(qty,2) * parseFloat(price)).toFixed(2);
+              jQuery('.total_area_price').text('{{ cart.currency.symbol }}'+total);                               });
+    </script>
+    
+     
+    <script>
+      
+      $(document).ready(function(){
+  
+        $( "body" ).on( "click",'.variant_color_swatch',function( event ) {
+          
+          
+          setTimeout(function() { 
+             
+            console.log("workimg");
+             var val = window.location.href;
+
+            var variantID = val.substr(val.indexOf("=") + 1)
+           
+
+              var pId= '{{ product.handle }}';
+
+              jQuery.getJSON('/products/'+pId+'.js', function(product) {
+                
+                console.log(product.variants);
+
+                product.variants.forEach(function(item) {
+
+                  if(item.id == variantID){
+
+                    var feature_image = item.featured_image;
+
+              
+                    
+                  /* create html tag now */
+                    $('.fancybox div').hide();
+    			  var  variant_feature_image = '<a  class="appendGallery slider_slider_0 fancybox slider_Black" data-fancybox-group="product-gallery" href="'+feature_image.src+'"><div data-media-id="22265376047185" data-media="'+feature_image.src+'" class="product_media_element synergy_media product-featured-image-wrapper product-zoom"><img data-src="'+feature_image.src+'" height="" width="" class="product-featured-image ls-is-cached lazyloaded" src="'+feature_image.src+'" alt="Black" data-zoom="'+feature_image.src+'6"></div></a>'
+                    
+    
+    				$( ".product-featured-images-wrapper" ).append(variant_feature_image);
+
+                  } else {
+
+
+
+                  }
+
+
+
+                });
+
+            });
+
+
+            
+          }, 300);
+			
+        
+          
+          
+         
+          
+        });
+     
+      });
+      
+      
+    </script>
+  
+{% if template == '404' %}
+<script>window.location.href = '/';</script>
+{% endif %}
+
+=======================================================================================================================================================================
+
+
+
 <!-- .go-cart__drawer {
     position: fixed;
     top: 0;
