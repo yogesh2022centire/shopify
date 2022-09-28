@@ -1,0 +1,161 @@
+<!-- .go-cart__drawer {
+    position: fixed;
+    top: 0;
+    right: -480px;
+    z-index: 40;
+    width: 100%;
+    max-width: 480px;
+    height: 100%;
+    background-color: #fff;
+    -webkit-transition: all .3s ease-in-out;
+    transition: all .3s ease-in-out;
+    -webkit-backface-visibility: hidden;
+    backface-visibility: hidden;
+} -->
+
+<!--go cart modal fail-->
+<div class="go-cart__modal go-cart__modal--fail js-go-cart-modal-fail">
+
+    <div class="go-cart-modal">
+
+        <!--go cart modal close-->
+        <div class="go-cart-modal__close js-go-cart-modal-fail-close">
+
+            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 20 20">
+                <path d="M15.89 14.696l-4.734-4.734 4.717-4.717c.4-.4.37-1.085-.03-1.485s-1.085-.43-1.485-.03L9.641 8.447 4.97 3.776c-.4-.4-1.085-.37-1.485.03s-.43 1.085-.03 1.485l4.671 4.671-4.688 4.688c-.4.4-.37 1.085.03 1.485s1.085.43 1.485.03l4.688-4.687 4.734 4.734c.4.4 1.085.37 1.485-.03s.43-1.085.03-1.485z"></path>
+            </svg>
+
+        </div>
+        <!--end go cart modal close-->
+
+        <!--go cart modal content-->
+        <div class="go-cart-modal__content js-go-cart-modal-fail-content">
+            Something went wrong, please contact us!
+        </div>
+        <!--end go cart modal content-->
+
+    </div>
+
+</div>
+<!--end go cart modal fail-->
+
+<!--go cart modal-->
+<div class="go-cart__modal js-go-cart-modal">
+
+    <div class="go-cart-modal">
+
+        <!--go cart modal close-->
+        <div class="go-cart-modal__close js-go-cart-modal-close">
+
+            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 20 20">
+                <path d="M15.89 14.696l-4.734-4.734 4.717-4.717c.4-.4.37-1.085-.03-1.485s-1.085-.43-1.485-.03L9.641 8.447 4.97 3.776c-.4-.4-1.085-.37-1.485.03s-.43 1.085-.03 1.485l4.671 4.671-4.688 4.688c-.4.4-.37 1.085.03 1.485s1.085.43 1.485.03l4.688-4.687 4.734 4.734c.4.4 1.085.37 1.485-.03s.43-1.085.03-1.485z"></path>
+            </svg>
+
+        </div>
+        <!--end go cart modal close-->
+
+        <!--go cart modal content-->
+        <div class="go-cart-modal__content js-go-cart-modal-content"></div>
+        <!--end go cart modal content-->
+
+        <!--go cart modal buttons-->
+        <div class="go-cart-modal__buttons">
+
+            <a class="go-cart__button js-go-cart-modal-close">
+                Continue shopping
+            </a>
+
+            <a href="/cart/" class="go-cart__button">
+                View cart
+            </a>
+
+        </div>
+        <!--end go cart modal buttons-->
+
+    </div>
+
+</div>
+<!--end go cart modal-->
+
+<!--go cart drawer-->
+<div class="go-cart__drawer js-go-cart-drawer" tabindex="-1">
+
+    <div class="go-cart-drawer">
+
+        <!--go cart drawer close-->
+        <div class="go-cart-drawer__header">
+
+            <button class="go-cart-drawer__close js-go-cart-drawer-close" aria-label="Close cart" title="Close cart">
+
+                {% render 'icon-arrow' %}
+
+            </button>
+
+        </div>
+        <!--end go cart drawer close-->
+
+        <!--go cart drawer content-->
+        <div class="go-cart-drawer__content js-go-cart-drawer-content"></div>
+        <!--end go cart drawer content-->
+
+        <!--go cart drawer subtotal-->
+        <div class="go-cart-drawer__subtotal">
+            <span class="go-cart-drawer__subtotal-label">Subtotal</span>
+            <span class="go-cart-drawer__subtotal-price js-go-cart-drawer-subtotal"></span>
+        </div>
+        <!--end go cart drawer subtotal-->
+
+        <!--go cart drawer buttons-->
+        <div class="go-cart-drawer__footer js-go-cart-drawer-footer">
+
+            <small class="tax-note caption-large rte">
+                {%- if cart.taxes_included and shop.shipping_policy.body != blank -%}
+                {{ 'sections.cart.taxes_included_and_shipping_policy_html' | t: link: shop.shipping_policy.url }}
+                {%- elsif cart.taxes_included -%}
+                {{ 'sections.cart.taxes_included_but_shipping_at_checkout' | t }}
+                {%- elsif shop.shipping_policy.body != blank -%}
+                {{ 'sections.cart.taxes_and_shipping_policy_at_checkout_html' | t: link: shop.shipping_policy.url }}
+                {%- else -%}
+                {{ 'sections.cart.taxes_and_shipping_at_checkout' | t }}
+                {%- endif -%}
+            </small>
+      
+        <form class="header-cart-contents-cta" action="/cart" method="post" novalidate>
+          {% comment %} 
+            <a href="/collections/all" class="btn btn-primary btn-block btn-continue-shopping">{{ 'general.continue_shopping' | t }}</a>
+          {% endcomment %}
+            <a href="/cart" class="btn btn-secondary btn-block mt-2">{{ 'general.view_cart' | t }}</a>
+           
+            <a href="/checkout" class="btn btn-secondary btn-block mt-2 cart__checkout-button button" aria-label="Checkout">{{ 'general.checkout_shorthand' | t }}</a>
+        </form>
+
+        </div>
+        <!--end go cart drawer buttons-->
+
+    </div>
+
+</div>
+<!--end go cart drawer-->
+
+<!--go cart overlay-->
+<div class="go-cart__overlay js-go-cart-overlay">
+</div>
+<!--end go cart overlay-->
+
+{% schema %}
+{
+	"name": "Mini Cart",
+	"settings": [
+		{
+			"type": "header",
+			"content": {
+				"en": "Mini Cart"
+			},
+			"info": {
+				"en": "This area is empty and for the use of the Mini Cart only."
+			}
+		}
+]
+}
+{% endschema %}
+
