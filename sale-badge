@@ -1,0 +1,15 @@
+<a href="{{ product.url }}" class="mm-product-link">&nbsp;</a>
+{%- if product.compare_at_price < product.price -%}
+	{% assign discount = product.price | minus: product.compare_at_price %}
+	{% assign discountpercent = discount | times: '100' | divided_by: product.price %}
+	<p class="sale-badge">
+		<span>{{ discountpercent }}%</span>
+	</p>
+{%- endif -%}
+<img src="{{ product.featured_image | img_url: '400x' }}">
+<h2>{{ product.title }}</h2>
+{%- if product.compare_at_price < product.price -%}
+	<p class="mm-product-price"><span>{{ product.price | money }}</span> {{ product.compare_at_price | money }}</p>
+{%- else -%}
+	<p class="mm-product-price">{{ product.price | money }}</p>
+{%- endif -%}
