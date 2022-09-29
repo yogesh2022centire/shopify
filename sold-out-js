@@ -1,0 +1,53 @@
+  <script>
+    var selectCallback = function(variant, selector){
+      if(variant){
+
+        $('#id').val(variant.id);
+
+        // Update variant image on change.
+        $('.product-thumbnail').each(function(index){
+          var masterImage  = $(this).data('master');
+          var currentImage = variant.featured_image.src.substring(6);
+          if(masterImage == currentImage) {
+            $(this).trigger('click');
+          }
+        });
+
+    if(variant && variant.available){
+
+      Array.from($('[data-add-to-cart]')).forEach(addToCart => {
+
+         $(addToCart).removeClass('disabled').removeAttr('disabled').val('Add to Cart');
+      })
+     
+    } else {
+
+            Array.from($('[data-add-to-cart]')).forEach(addToCart => {
+
+             $(addToCart).val('Sold Out').addClass('disabled').attr('disabled', 'disabled');
+      })
+      
+      
+    }
+
+        {%- if settings.display_vat -%}
+        var priceWithoutVAT = variant.price;
+        var priceWithVAT    = variant.price * {{ settings.vat }};
+        var comparePrice = variant.compare_at_price;
+        $('#price-field').html('<span class="product-price original-price without-vat">' + Shopify.formatMoney(priceWithoutVAT) + '{%- unless settings.vat_text_without == blank -%}<span class="vat-text"> {{ settings.vat_text_without }}</span>{%- endunless -%}</span><span class="product-price original-price with-vat">' + Shopify.formatMoney(priceWithVAT) + '{%- unless settings.vat_text_with == blank -%}<span class="vat-text"> {{ settings.vat_text_with }}</span>{%- endunless -%}</span>' );
+                                                                                                               if (comparePrice){
+                               var price_compare_html = '<del>'+ Shopify.formatMoney(comparePrice)+'</del>';
+                               $('.product-price.original-price.with-vat').append(price_compare_html);
+                               }
+                                                                                                               {%- else -%}
+                                                                                                               $('#price-field').html('<span class="product-price original-price">' + Shopify.formatMoney(variant.price) + '</span>' );
+					{%- endif -%}
+				} else {
+					$('#AddToCart').val('Unavailable').addClass('disabled').attr('disabled', 'disabled');
+                                                                                                                                      }
+                                                                                                                                      }
+
+                                                                                                                                      jQuery(function($){
+                               new Shopify.OptionSelectors("product-select", { product: {{ product | json }}, onVariantSelected: selectCallback });
+      });
+  </script>
